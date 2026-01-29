@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import app from "./app.js";
 
 import "./jobs/fetchNews.job.js"; // ✅ Cron job starts here
-
+import "./jobs/verifyNews.job.js";
 dotenv.config();
 
 const PORT = process.env.PORT || 5000;
