@@ -3,8 +3,10 @@ import mongoose from "mongoose";
 const eventSchema = new mongoose.Schema(
   {
     headline: String,
-    summary: String,
-    whyItMatters: String,
+
+    summary: { type: String, default: "" },        
+    whyItMatters: { type: String, default: "" },   
+    
     category: String,
     region: String,
     trustScore: Number,
