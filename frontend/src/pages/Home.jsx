@@ -6,11 +6,24 @@ import NewsCard from "../components/NewsCard";
 export default function Home() {
   const [events, setEvents] = useState([]);
   const [active, setActive] = useState("Top");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/events/top")
-      .then((res) => res.json())
-      .then((data) => setEvents(data));
+    const loadEvents = () => {
+      setLoading(true);
+      fetch("http://localhost:5000/api/events/top")
+        .then((res) => res.json())
+        .then((data) => {
+          setEvents(data);
+          setLoading(false);
+        });
+    };
+
+    loadEvents(); // initial load
+
+    const interval = setInterval(loadEvents, 60000); // refresh every 60 sec
+
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -31,9 +44,18 @@ export default function Home() {
 
         {/* News Cards */}
         <div className="mt-8 grid gap-6">
-          {events.map((event) => (
-            <NewsCard key={event._id} event={event} />
-          ))}
+          {loading
+            ? Array.from({ length: 4 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="p-6 bg-white rounded-2xl shadow animate-pulse"
+                >
+                  <div className="h-5 bg-gray-200 rounded w-3/4 mb-3"></div>
+                  <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                  <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+                </div>
+              ))
+            : events.map((event) => <NewsCard key={event._id} event={event} />)}
         </div>
       </div>
     </div>

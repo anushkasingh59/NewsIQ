@@ -1,7 +1,4 @@
 import Groq from "groq-sdk";
-
-
-
 export const generateSummary = async (headline) => {
     const client = new Groq({
         apiKey: process.env.GROQ_API_KEY
