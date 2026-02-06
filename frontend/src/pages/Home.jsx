@@ -9,22 +9,35 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const loadEvents = () => {
-      setLoading(true);
-      fetch("http://localhost:5000/api/events/top")
-        .then((res) => res.json())
-        .then((data) => {
-          setEvents(data);
-          setLoading(false);
-        });
-    };
+  const loadEvents = () => {
+    setLoading(true);
 
-    loadEvents(); // initial load
+    let url = "http://localhost:5000/api/events/top";
 
-    const interval = setInterval(loadEvents, 60000); // refresh every 60 sec
+    if (active === "India")
+      url = "http://localhost:5000/api/events?region=India";
 
-    return () => clearInterval(interval);
-  }, []);
+    if (active === "World")
+      url = "http://localhost:5000/api/events?region=World";
+
+    if (active === "Technology")
+      url = "http://localhost:5000/api/events?category=Technology";
+
+    fetch(url)
+      .then((res) => res.json())
+      .then((data) => {
+        setEvents(data);
+        setLoading(false);
+      });
+  };
+
+  loadEvents();
+
+  const interval = setInterval(loadEvents, 60000);
+
+  return () => clearInterval(interval);
+
+}, [active]);   // ✅ dependency here
 
   return (
     <div>
